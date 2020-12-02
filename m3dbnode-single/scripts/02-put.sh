@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#for i in {1..20}; do
-i=0
+for i in {1..20}; do
 curl -sS -X POST http://localhost:9003/writetagged -d '{
   "namespace": "default",
   "id": "test-id-'${i}'",
@@ -17,5 +16,4 @@ curl -sS -X POST http://localhost:9003/writetagged -d '{
   }
 }
 '
-#done
-
+done

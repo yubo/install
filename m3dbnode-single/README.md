@@ -6,10 +6,9 @@
 [single node](https://m3db.github.io/m3/how_to/single_node/)
 
 ```
-docker pull quay.io/m3db/m3dbnode:latest
 docker run -p 7201:7201 -p 7203:7203 -p 9003:9003 \
---name m3db -v $(pwd)/m3db_data:/var/lib/m3db \
-quay.io/m3db/m3dbnode:latest
+	--name m3db -v $(pwd)/m3db_data:/var/lib/m3db \
+	quay.io/m3db/m3dbnode:latest
 ```
 
 #### systemd 启动
@@ -17,6 +16,13 @@ install
 ```
 sudo ./scripts/install.sh
 sudo systemctl status m3dbnode
+```
+
+paths
+```
+/opt/data/m3db
+/opt/data/m3kv
+/opt/m3db
 ```
 
 ## create database
