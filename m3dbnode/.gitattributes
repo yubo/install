@@ -1,2 +1,0 @@
-bin/m3ctl filter=lfs diff=lfs merge=lfs -text
-bin/m3dbnode filter=lfs diff=lfs merge=lfs -text
