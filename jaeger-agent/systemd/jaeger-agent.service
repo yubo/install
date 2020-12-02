@@ -1,0 +1,17 @@
+[Unit]
+Description=jaeger-agent
+
+[Service]
+WorkingDirectory=/opt/jaeger-agent
+Type=simple
+EnvironmentFile=-/opt/jaeger-agent/etc/jaeger-agent.env
+ExecStart=/opt/jaeger-agent/bin/jaeger-agent \
+  --reporter.grpc.host-port=${REPORTER_ADDR} \
+  --jaeger.tags=host=%H
+Restart=on-failure
+RestartSec=10s
+SuccessExitStatus=0
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

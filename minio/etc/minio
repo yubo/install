@@ -1,0 +1,8 @@
+# Remote volumes to be used for MinIO server.
+MINIO_VOLUMES=/var/lib/minio
+# Use if you want to run MinIO on a custom port.
+MINIO_OPTS="--address :8090"
+# Access Key of the server.
+MINIO_ACCESS_KEY=admin1234
+# Secret key of the server.
+MINIO_SECRET_KEY=admin1234

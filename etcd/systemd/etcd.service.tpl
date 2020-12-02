@@ -1,0 +1,34 @@
+[Unit]
+Description=Etcd Server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+Documentation=https://github.com/coreos
+
+[Service]
+Type=notify
+WorkingDirectory=/opt/etcd/
+ExecStart=/opt/etcd/bin/etcd \
+  --data-dir=/opt/data/etcd \
+  --name=var_node \
+  --initial-cluster-token=etcd-cluster \
+  --initial-cluster=var_endpoints \
+  --initial-cluster-state=new \
+  --listen-peer-urls=https://0.0.0.0:2380 \
+  --initial-advertise-peer-urls=https://0.0.0.0:2380 \
+  --listen-client-urls=https://0.0.0.0:2379,https://127.0.0.1:2379 \
+  --advertise-client-urls=https://0.0.0.0:2379 \
+  --cert-file=/opt/etcd/certs/server.pem \
+  --key-file=/opt/etcd/certs/server-key.pem \
+  --trusted-ca-file=/opt/etcd/certs/ca.pem \
+  --peer-cert-file=/opt/etcd/certs/peer.pem \
+  --peer-key-file=/opt/etcd/certs/peer-key.pem \
+  --peer-trusted-ca-file=/opt/etcd/certs/ca.pem \
+  --peer-client-cert-auth \
+  --client-cert-auth=true
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

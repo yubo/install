@@ -1,0 +1,11 @@
+[Unit]
+Description=Node Exporter
+
+[Service]
+#User=node_exporter
+ExecStart=/opt/node_exporter/bin/node_exporter
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

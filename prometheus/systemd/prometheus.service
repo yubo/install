@@ -1,0 +1,20 @@
+# /etc/systemd/system/prometheus.service
+# /bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles
+[Unit]
+Description=Prometheus Server
+Documentation=https://prometheus.io/docs/introduction/overview/
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/opt/prometheus/bin/prometheus --config.file=/opt/prometheus/etc/prometheus.yml \
+	--storage.tsdb.path=/opt/data/prometheus \
+	--web.console.libraries=/opt/prometheus/console_libraries \
+	--web.console.templates=/opt/prometheus/consoles
+Restart=on-failure
+RestartSec=10s
+SuccessExitStatus=0
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

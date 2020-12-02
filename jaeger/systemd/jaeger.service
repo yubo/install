@@ -1,0 +1,19 @@
+[Unit]
+Description=Jaeger
+
+[Service]
+WorkingDirectory=/opt/jaeger
+Type=simple
+EnvironmentFile=-/opt/jaeger/etc/jaeger.env
+#  50k traces eats more than 500MB of disk space at least with the traces I've tried.
+ExecStart=/opt/jaeger/bin/jaeger-all-in-one \
+  --memory.max-traces=50000 \
+  --collector.zipkin.http-port=9411 \
+  --sampling.strategies-file=/opt/jaeger/etc/sampling_strategies.json
+Restart=on-failure
+RestartSec=10s
+SuccessExitStatus=0
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
