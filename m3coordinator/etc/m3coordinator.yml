@@ -1,0 +1,83 @@
+listenAddress:
+  value: "0.0.0.0:7201"
+
+logging:
+  level: info
+
+metrics:
+  scope:
+    prefix: "coordinator"
+  prometheus:
+    handlerPath: /metrics
+    listenAddress: 0.0.0.0:7203 # until https://github.com/m3db/m3/issues/682 is resolved
+  sanitization: prometheus
+  samplingRate: 1.0
+  extended: none
+
+clusters:
+  - namespaces:
+      - namespace: default
+        type: unaggregated
+        retention: 48h
+      - namespace: testagg
+        type: aggregated
+        resolution: 30s
+        retention: 48h
+    client:
+      config:
+        service:
+          env: default_env
+          zone: embedded
+          service: m3db
+          cacheDir: /opt/m3coordinator/m3kv
+          etcdClusters:
+            - zone: embedded
+              endpoints:
+                - 127.0.0.1:2379
+      writeConsistencyLevel: majority
+      readConsistencyLevel: unstrict_majority
+
+tagOptions:
+  idScheme: quoted
+
+# This is for sending metrics to the remote m3aggregators
+downsample:
+  remoteAggregator:
+    client:
+      type: m3msg
+      m3msg:
+        producer:
+          writer:
+            topicName: aggregator_ingest
+            topicServiceOverride:
+              zone: embedded
+              environment: default_env
+            placement:
+              isStaged: true
+            placementServiceOverride:
+              namespaces:
+                placement: /placement
+            connection:
+              numConnections: 4
+            messagePool:
+              size: 16384
+              watermark:
+                low: 0.2
+                high: 0.5
+
+# This is for configuring the ingestion server that will receive metrics from the m3aggregators on port 7507
+ingest:
+  ingester:
+    workerPoolSize: 10000
+    opPool:
+      size: 10000
+    retry:
+      maxRetries: 3
+      jitter: true
+    logSampleRate: 0.01
+  m3msg:
+    server:
+      listenAddress: "0.0.0.0:7507"
+      retry:
+        maxBackoff: 10s
+        jitter: true
