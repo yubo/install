@@ -14,4 +14,7 @@ docker load --input images/kube-scheduler.tar
 docker load --input images/etcd.tar
 docker load --input images/coredns.tar
 docker load --input images/pause.tar
+docker load --input images/pause.tar
+docker load --input images/ingress-nginx-controller.tar
+docker tag 9c6beaa15702 k8s.gcr.io/ingress-nginx/controller:v0.42.0
 

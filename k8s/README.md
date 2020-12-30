@@ -105,3 +105,14 @@ kubeadm reset
 # https://github.com/coreos/flannel/blob/master/Documentation/kube-flannel.yml 
 kubectl applay -f ./flannel/kube-flannel.yml
 ```
+
+
+#### install nginx-ingress
+```
+# https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm fetch ingress-nginx/ingress-nginx
+tar xzvf ingress-nginx-3.18.0.tgz
+cd ingress-nginx
+helm install my-release .
+```
