@@ -1,8 +1,8 @@
 #!/bin/bash
 . ./functions.sh
 
-apps="jaeger-agent"
-hosts="10.86.92.17"
+apps="k8s"
+hosts="yubo02 yubo03"
 
 run sync
 #run install
