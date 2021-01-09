@@ -12,6 +12,8 @@ vi /etc/selinux/config
 #systemctl stop firewalld
 
 
+swapoff -a && sed -i '/ swap / s/^/#/' /etc/fstab
+
 ```
 
 #### install
@@ -39,9 +41,9 @@ sysctl -w net.bridge.bridge-nf-call-iptables=1
 echo "net.bridge.bridge-nf-call-iptables=1" > /etc/sysctl.d/k8s.conf
 
 swapoff -a && sed -i '/ swap / s/^/#/' /etc/fstab
-hostnamectl --static set-hostname yubo01
-#hostnamectl --static set-hostname yubo02
-#hostnamectl --static set-hostname yubo03
+hostnamectl --static set-hostname node1.k8s
+#hostnamectl --static set-hostname node2.k8s
+#hostnamectl --static set-hostname node3.k8s
 ```
 
 #### env
@@ -103,7 +105,7 @@ kubeadm reset
 #### install CNI (flannel)
 ```
 # https://github.com/coreos/flannel/blob/master/Documentation/kube-flannel.yml 
-kubectl applay -f ./flannel/kube-flannel.yml
+kubectl apply -f ./flannel/kube-flannel.yml
 ```
 
 
@@ -115,4 +117,11 @@ helm fetch ingress-nginx/ingress-nginx
 tar xzvf ingress-nginx-3.18.0.tgz
 cd ingress-nginx
 helm install my-release .
+```
+
+#### install helm repo
+```
+# add https://github.com/helm/charts as stable repo
+helm repo add stable https://charts.helm.sh/stable
+helm fetch stable/nfs-client-provisioner
 ```
