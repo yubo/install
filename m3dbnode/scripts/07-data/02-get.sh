@@ -1,10 +1,10 @@
 #!/bin/bash
 curl -sS -X POST http://localhost:9003/query -d '{
-  "namespace": "test1113_ns",
+  "namespace": "default",
   "query": {
     "regexp": {
-      "field": "city",
-      "regexp": "city-0"
+      "field": "server",
+      "regexp": "a"
     }
   },
   "rangeStart": '"$(date -d "10 second ago" "+%s")"',

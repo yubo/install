@@ -7,6 +7,14 @@ curl -sS -X POST http://localhost:9003/writetagged -d '{
   "id": "test-id-'${i}'",
   "tags": [
     {
+      "name": "server",
+      "value": "a"
+    },
+    {
+      "name": "server",
+      "value": "b"
+    },
+    {
       "name": "city",
       "value": "city-'${i}'"
     }
