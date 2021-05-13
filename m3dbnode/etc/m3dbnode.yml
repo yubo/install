@@ -1,25 +1,24 @@
 coordinator:
-  listenAddress:
-    value: "127.0.0.1:7201"
+  listenAddress: "127.0.0.1:7201"
 
   local:
     namespaces:
       - namespace: default
-        type: unaggregated
         retention: 48h
+        type: unaggregated
 
   logging:
     level: info
 
   metrics:
-    scope:
-      prefix: "coordinator"
+    extended: "detailed"
     prometheus:
       handlerPath: /metrics
       listenAddress: 127.0.0.1:7203 # until https://github.com/m3db/m3/issues/682 is resolved
-    sanitization: prometheus
     samplingRate: 1.0
-    extended: none
+    sanitization: prometheus
+    scope:
+      prefix: "coordinator"
 
   tagOptions:
     # Configuration setting for generating metric IDs from tags.
@@ -54,24 +53,11 @@ db:
   gcPercentage: 100
 
   writeNewSeriesAsync: true
-  writeNewSeriesLimitPerSecond: 1048576
   writeNewSeriesBackoffDuration: 2ms
 
   bootstrap:
-    bootstrappers:
-        - filesystem
-        - commitlog
-        - peers
-        - uninitialized_topology
     commitlog:
       returnUnfulfilledForCorruptCommitLogFiles: false
-
-  cache:
-    series:
-      policy: lru
-    postingsList:
-      size: 262144
-
   commitlog:
     flushMaxBytes: 524288
     flushEvery: 1s
@@ -79,30 +65,44 @@ db:
       calculationType: fixed
       size: 2097152
 
-  fs:
-    filePathPrefix: /opt/data/m3db
+  filesystem:
+    # Directory to store M3DB data in.
+    filePathPrefix: /home/m3db
+    # Various fixed-sized buffers used for M3DB I/O.
+    writeBufferSize: 65536
+    dataReadBufferSize: 65536
+    infoReadBufferSize: 128
+    seekReadBufferSize: 4096
+    # Maximum Mib/s that can be written to disk by background operations like flushing
+    # and snapshotting to prevent them from interfering with the commitlog. Increasing
+    # this value can make node adds significantly faster if the underlying disk can
+    # support the throughput.
+    throughputLimitMbps: 1000.0
+    throughputCheckEvery: 128
 
-  config:
-    service:
-      env: default
-      zone: embedded
-      service: m3db
-      cacheDir: /opt/data/m3kv
-      etcdClusters:
-        - zone: embedded
-          endpoints:
-            - 127.0.0.1:2379 #修改etcd节点
-            #- 10.178.25.123:2379
-          tls:
-            caCrtPath: /opt/etcd/certs/ca.pem
-            crtPath: /opt/etcd/certs/client.pem
-            keyPath: /opt/etcd/certs/client-key.pem
-    #seedNodes:
-    #  initialCluster:
-    #    - hostID: m3db-dev01-yubo.py
-    #      endpoint: http://m3db-dev01-yubo.py:2380
-    #    - hostID: m3db-dev02-yubo.py
-    #      endpoint: http://m3db-dev02-yubo.py:2380
+  discovery:
+    config:
+      service:
+        env: default
+        zone: embedded
+        service: m3db
+        cacheDir: /home/m3kv
+        etcdClusters:
+          - zone: embedded
+            endpoints:
+              - 10.255.0.146:2379
+              - 10.255.0.129:2379
+              - 10.255.0.137:2379
+            tls:
+              caCrtPath: /etc/etcd/certs/ca.pem
+              crtPath: /etc/etcd/certs/etcd-client.pem
+              keyPath: /etc/etcd/certs/etcd-client-key.pem
+      #seedNodes:
+      #  initialCluster:
+      #    - hostID: m3db-dev01-yubo.py
+      #      endpoint: http://m3db-dev01-yubo.py:2380
+      #    - hostID: m3db-dev02-yubo.py
+      #      endpoint: http://m3db-dev02-yubo.py:2380
 
   # un-comment the lines below to enable Jaeger tracing. See https://www.jaegertracing.io/docs/1.9/getting-started/
   # for quick local setup (which this config will send data to).
