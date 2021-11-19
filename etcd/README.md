@@ -12,6 +12,7 @@ cd etcd
 
 编辑 config/ssltool.yml
 
+
 ```yaml
 CN: etcd
 key:
@@ -65,3 +66,8 @@ make install
 ```
 make test
 ```
+
+## Resource
+  - https://github.com/yubo/gotool/tree/main/ssltool
+  - https://github.com/etcd-io/etcd
+  - https://etcd.io/docs/v3.5
