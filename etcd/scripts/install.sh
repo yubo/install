@@ -1,10 +1,18 @@
-#!/bin/bash -x
+#!/bin/bash
 OLDPATH=`pwd`
 ROOT=`cd $(dirname $0)/..; pwd`
 cd ${ROOT}
 function finish {
     cd ${OLDPATH} 
 }
+
+command -v systemctl >/dev/null 2>&1 || { echo "systemctl could not be found"; exit 1; }
+
+if [ ! -f bin/etcd ]; then
+	echo "${ROOT}/bin/etcd not be found"
+	echo "Download it from https://github.com/yubo/install/releases/download/v0.0.1/etcd.tar.gz"
+	exit 1;
+fi
 
 systemctl stop etcd.service
 

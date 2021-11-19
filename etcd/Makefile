@@ -16,7 +16,7 @@ disable:
 enable:
 	sudo systemctl enable etcd
 
-enable:
+stop:
 	sudo systemctl stop etcd
 
 test:
