@@ -29,10 +29,15 @@ repo_gpgcheck=1
 gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
 
-
+# docker-ce
+yum install -y yum-utils
+yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+yum install -y docker-ce docker-ce-cli containerd.io
 
 yum update  # kernel-3.10.0-1160.11.1.el7
-yum install -y docker kubelet kubeadm kubectl kubernetes-cni
+yum install -y kubelet kubeadm kubectl kubernetes-cni
 systemctl enable docker &&  systemctl start docker
 systemctl enable kubelet &&  systemctl start kubelet
 init 6
