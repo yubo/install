@@ -110,13 +110,15 @@ kubeadm reset
 ```
 
 #### install nginx-ingress
+https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx
+
 ```
-# https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx
+# get repo info
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm fetch ingress-nginx/ingress-nginx
-tar xzvf ingress-nginx-3.18.0.tgz
-cd ingress-nginx
-helm install my-release .
+helm repo update
+
+# install
+helm install my-ingress-nginx ingress-nginx/ingress-nginx
 ```
 
 #### install helm repo
