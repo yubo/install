@@ -1,8 +1,10 @@
 ## Jaeger All in One
+https://www.jaegertracing.io/docs/getting-started/
+
 You can then navigate to http://localhost:16686 to access the Jaeger UI.
 
-
 #### Run as a docker container
+
 ```
 docker run -d --name jaeger \
   -e COLLECTOR_ZIPKIN_HOST_PORT=:9411 \
@@ -14,7 +16,7 @@ docker run -d --name jaeger \
   -p 14268:14268 \
   -p 14250:14250 \
   -p 9411:9411 \
-  jaegertracing/all-in-one:1.28
+  jaegertracing/all-in-one:1.31
 ```
 
 #### Run as a service
