@@ -46,26 +46,13 @@ sysctl -w net.bridge.bridge-nf-call-iptables=1
 echo "net.bridge.bridge-nf-call-iptables=1" > /etc/sysctl.d/k8s.conf
 
 swapoff -a && sed -i '/ swap / s/^/#/' /etc/fstab
-hostnamectl --static set-hostname node1.k8s
-#hostnamectl --static set-hostname node2.k8s
-#hostnamectl --static set-hostname node3.k8s
 ```
-
-#### env
-```
-sudo cat >/etc/docker/daemon.json <<'EOF'
-{
-	  "registry-mirrors": ["https://stq1lqv0.mirror.aliyuncs.com"]
-}
-EOF
-```
-
 
 #### init kube
 ```
 # init
 # https://github.com/coreos/flannel/blob/master/Documentation/kubernetes.md
-kubeadm init --kubernetes-version=v1.20.1 --pod-network-cidr=10.244.0.0/16 
+kubeadm init --kubernetes-version=v1.23.3 --pod-network-cidr=10.244.0.0/16 
 
 Your Kubernetes control-plane has initialized successfully!
 
@@ -85,8 +72,8 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 
 Then you can join any number of worker nodes by running the following on each as root:
 
-kubeadm join 172.20.70.29:6443 --token r972wf.bqblgrz4choludfp \
-    --discovery-token-ca-cert-hash sha256:af607c74bca02b98d91ea52195172c83e779ae6d4966e9eaba268108b0a9ecf4
+kubeadm join 172.20.70.29:6443 --token f8f8ce.n4j31g06b3m5j74o \
+        --discovery-token-ca-cert-hash sha256:91a6b6f79daf076155f3b89838ae29c41cdc02f30c458a21139a436fe9667916
 ```
 
 
