@@ -48,7 +48,7 @@ echo "net.bridge.bridge-nf-call-iptables=1" > /etc/sysctl.d/k8s.conf
 swapoff -a && sed -i '/ swap / s/^/#/' /etc/fstab
 ```
 
-#### init kube
+#### init master node
 ```
 # init
 # https://github.com/coreos/flannel/blob/master/Documentation/kubernetes.md
@@ -76,6 +76,22 @@ kubeadm join 172.20.70.29:6443 --token f8f8ce.n4j31g06b3m5j74o \
         --discovery-token-ca-cert-hash sha256:91a6b6f79daf076155f3b89838ae29c41cdc02f30c458a21139a436fe9667916
 ```
 
+#### install CNI (flannel)
+```
+# https://github.com/coreos/flannel/blob/master/Documentation/kube-flannel.yml 
+kubectl apply -f ./flannel/kube-flannel.yml
+
+# or 
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+```
+
+#### join nodes
+```
+kubeadm join 172.20.70.29:6443 --token f8f8ce.n4j31g06b3m5j74o \
+        --discovery-token-ca-cert-hash sha256:91a6b6f79daf076155f3b89838ae29c41cdc02f30c458a21139a436fe9667916
+```
+
+## ops
 
 #### set kube.conf
 ```
@@ -92,14 +108,6 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 kubectl -n kube-system get cm kubeadm-config -o yaml
 kubeadm reset
 ```
-
-
-#### install CNI (flannel)
-```
-# https://github.com/coreos/flannel/blob/master/Documentation/kube-flannel.yml 
-kubectl apply -f ./flannel/kube-flannel.yml
-```
-
 
 #### install nginx-ingress
 ```
