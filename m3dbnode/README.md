@@ -1,4 +1,8 @@
-## config
+# m3db install
+
+## cluster install
+
+### config
 ```
 cat >> /etc/sysctl.conf <'EOF'
 vm.max_map_count = 3000000
@@ -8,19 +12,19 @@ fs.nr_open = 3000000
 EOF
 ```
 
-## install
+### install
 ```
 sudo ./scripts/install.sh
 ```
 
 
-## postcheck
+### postcheck
 ```
 sudo systemctl status m3dbnode
 ```
 
 
-## init database
+### init database
 ```
 curl -X POST http://localhost:7201/api/v1/database/create -d '{
   "type": "cluster",
@@ -58,7 +62,7 @@ curl -X POST http://localhost:7201/api/v1/database/create -d '{
 
 ```
 
-## add dbnode
+### add dbnode
 ```
 curl -X POST http://localhost:7201/api/v1/services/m3db/placement -d '{
   "instances": [
@@ -73,4 +77,18 @@ curl -X POST http://localhost:7201/api/v1/services/m3db/placement -d '{
     }
   ]
 }'
+```
+
+## single install
+
+```
+$ cd /opt/m3db
+
+# cp bin/ etc/ scripts/
+
+# start
+./bin/m3dbnode -f ./etc/m3dbnode-single.yml
+
+# init db
+$ ./scripts/01-database/10-create-db-single.sh
 ```

@@ -7,7 +7,7 @@ curl -sS -X POST http://localhost:9003/query -d '{
       "regexp": "a"
     }
   },
-  "rangeStart": '"$(date -d "10 second ago" "+%s")"',
+  "rangeStart": '"$(date -v-1m "+%s")"',
   "rangeEnd": '"$(date "+%s")"'
 }'
 
